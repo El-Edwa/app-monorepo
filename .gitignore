@@ -8,5 +8,3 @@ __pycache__/
      .env
      *.log
      .dockerignore
-
-.vscode/*
