@@ -7,6 +7,7 @@ import NavbarUser from "@/components/layouts/NavbarUser";
 export default function RootLayout() {
   return (
     <main className="grid grid-cols-6 grid-rows-6">
+      {/* Sidebar */}
       <nav className="row-span-6 col-start-1 col-span-2 xl:col-span-1 xl:col-start-2 py-4 sm:px-4 flex flex-col justify-between h-screen border-r border-neutral-800 justify-self-center-safe xl:justify-self-start">
         <div>
           <BsTwitterX size={"2em"} className="ml-4 mb-4" />
@@ -18,9 +19,13 @@ export default function RootLayout() {
         </div>
         <NavbarUser />
       </nav>
+
+      {/* The main content */}
       <section className="col-span-4 xl:col-span-2 row-span-6 col-start-3 xl:col-start-3">
         <Outlet />
       </section>
+
+      {/*Search and What's happening Sidebar */}
       <section className="hidden xl:block row-span-6 col-start-4 xl:col-start-5 col-span-2 p-7">
         Search and What's happening section
       </section>
