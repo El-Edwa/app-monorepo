@@ -8,3 +8,7 @@ __pycache__/
      .env
      *.log
      .dockerignore
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json

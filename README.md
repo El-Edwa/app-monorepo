@@ -13,14 +13,14 @@
 Create dedicated branches for each microservice:
 
 ```bash
-git checkout -b user-service
-git checkout -b tweet-service
-git checkout -b timeline-service
-git checkout -b engagement-service
-git checkout -b relationship-service
-git checkout -b messaging-service
-git checkout -b notification-service
-git checkout -b search-service
+git checkout -b service/user-service
+git checkout -b service/tweet-service
+git checkout -b service/timeline-service
+git checkout -b service/engagement-service
+git checkout -b service/relationship-service
+git checkout -b service/messaging-service
+git checkout -b service/notification-service
+git checkout -b service/search-service
 ```
 
 ### Feature/Update Branches (Short-lived)
