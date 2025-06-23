@@ -11,7 +11,7 @@ interface NavbarItemProps {
 
 export default function NavbarItem({ name, to }: NavbarItemProps) {
   const getIcon = (itemName: string, isActive: boolean) => {
-    const iconProps = { size: "2em" };
+    const iconProps = { size: "1.7em" };
 
     switch (itemName) {
       case "Home":
@@ -54,7 +54,7 @@ export default function NavbarItem({ name, to }: NavbarItemProps) {
         {({ isActive }) => (
           <>
             {getIcon(name, isActive)}
-            <span className="md:text-2xl xl:block hidden">{name}</span>
+            <span className="md:text-xl xl:block hidden">{name}</span>
           </>
         )}
       </NavLink>
