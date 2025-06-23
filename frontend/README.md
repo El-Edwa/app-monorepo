@@ -20,7 +20,7 @@ This document outlines the libraries and tools used in the **X Clone (Frontend)*
 
 * **`react` & `react-dom`**: Core libraries for building and rendering UI.
 * **`react-router-dom`**: Declarative routing for single-page React applications.
-* **`react-helmet`**: For managing changes to the document head (e.g., title, meta tags).
+* **`react-helmet-async`**: For managing changes to the document head (e.g., title, meta tags).
 * **`react-icons`**: Provides access to popular icon libraries in a React-friendly way.
 
 ---

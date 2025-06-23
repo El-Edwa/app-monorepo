@@ -6,6 +6,7 @@ export default function ErrorPage() {
     <section className="flex flex-col items-center justify-center text-center min-h-screen">
       <Helmet>
         <title>Error 404 - Page Not Found</title>
+        <meta name="description" content="Error 404 - The requested page could not be found." />
       </Helmet>
       <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
       <p className="text-lg mb-6">
