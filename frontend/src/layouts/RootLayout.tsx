@@ -8,7 +8,7 @@ export default function RootLayout() {
   return (
     <main className="grid grid-cols-12 grid-rows-6">
       {/* Sidebar */}
-      <nav className="row-span-6 col-start-1 col-span-2 lg:col-span-1 xl:col-start-3 xl:col-span-2 py-4 flex flex-col justify-between items-center lg:items-start px-0 sm:px-3 h-full border-r border-neutral-800 ">
+      <nav className="row-span-6 col-start-1 col-span-2 lg:col-span-1 xl:col-start-3 xl:col-span-2 py-4 flex flex-col justify-between items-center lg:items-stretch px-0 sm:px-3 h-full border-r border-neutral-800 ">
         <div>
           <BsTwitterX size={"1.7em"} className="ml-4 mb-4" />
           <NavbarItems />
