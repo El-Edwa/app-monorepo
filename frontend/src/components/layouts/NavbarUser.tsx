@@ -2,7 +2,7 @@ import { IoIosMore } from "react-icons/io";
 
 export default function NavbarUser() {
   return (
-    <div className="flex justify-between items-start px-3 py-3 cursor-pointer hover:bg-neutral-900 rounded-full transition-colors duration-200">
+    <div className="flex justify-between items-start py-3 gap-8 cursor-pointer hover:bg-neutral-900 rounded-full transition-colors duration-200">
       <div className="flex items-center gap-2">
         {/* User Image */}
         <img
@@ -12,7 +12,7 @@ export default function NavbarUser() {
         />
         {/* User Name and Handle */}
         <div className="hidden xl:block">
-          <p className="font-bold">Skeleton</p>
+          <p className="font-bold truncate">Skeleton</p>
           <p className="text-neutral-500 text-sm">@death</p>
         </div>
       </div>
