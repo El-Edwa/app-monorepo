@@ -234,7 +234,7 @@ namespace DataAcess.Repos
                 return false;
             }
 
-            if (user.ImageId != 0 || user.ImageId != null)
+            if (user.ImageId.HasValue)
             {
                 existingUser.ImageId = user.ImageId;
             }

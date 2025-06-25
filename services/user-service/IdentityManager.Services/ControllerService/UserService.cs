@@ -25,44 +25,94 @@ namespace IdentityManager.Services.ControllerService
         {
             if (string.IsNullOrEmpty(userId))
             {
-                throw new Exception("User not found");
+                throw new ArgumentException("User ID is required");
             }
 
-            var user = await _userRepo.GetUserByID(userId);
-            ValidateFileUpload(request);
-
-            var image = new Image
+            try
             {
-                File = request.File,
-                FileName = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
-                FileExtension = Path.GetExtension(request.File.FileName),
-                FileSize = request.File.Length
-            };
+                var user = await _userRepo.GetUserByID(userId);
+                if (user == null)
+                {
+                    throw new ArgumentException($"User with ID {userId} not found");
+                }
 
-            await _imageRepo.Upload(image);
-            user.ImageId = image.Id;
-            await _userRepo.UpdateAsync(user);
+                ValidateFileUpload(request);
 
-            return user;
+                var image = new Image
+                {
+                    File = request.File,
+                    FileName = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                    FileExtension = Path.GetExtension(request.File.FileName),
+                    FileSize = request.File.Length
+                };
+
+                Console.WriteLine($"Creating image with filename: {image.FileName}{image.FileExtension}");
+                var uploadedImage = await _imageRepo.Upload(image);
+                
+                Console.WriteLine($"Image uploaded successfully with ID: {uploadedImage.Id}");
+                
+                // Update the user's image ID
+                user.ImageId = uploadedImage.Id;
+                var updateResult = await _userRepo.UpdateAsync(user);
+                
+                if (!updateResult)
+                {
+                    throw new Exception("Failed to update user with the new image");
+                }
+
+                return new { 
+                    Message = "Image uploaded successfully", 
+                    ImagePath = uploadedImage.FilePath,
+                    ImageId = uploadedImage.Id,
+                    User = new
+                    {
+                        Id = user.Id,
+                        Name = user.Name,
+                        UserName = user.UserName,
+                        ImageId = user.ImageId
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in UserService.UploadUserImageAsync: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                }
+                
+                throw;
+            }
         }
 
         private void ValidateFileUpload(ImageUploadRequestDto request)
         {
+            if (request == null)
+            {
+                throw new ArgumentException("Request cannot be null");
+            }
+            
             if (request.File == null)
             {
-                throw new Exception("File is required");
+                throw new ArgumentException("File is required");
             }
+            
             if (request.File.Length == 0)
             {
-                throw new Exception("File is empty");
+                throw new ArgumentException("File is empty");
             }
+            
             if (request.File.Length > 10 * 1024 * 1024)
             {
-                throw new Exception("File is too large");
+                throw new ArgumentException("File is too large (max 10MB)");
             }
-            if (request.File.ContentType != "image/jpeg" && request.File.ContentType != "image/png")
+            
+            var allowedContentTypes = new[] { "image/jpeg", "image/png", "image/jpg" };
+            if (!allowedContentTypes.Contains(request.File.ContentType))
             {
-                throw new Exception("File is not an image");
+                throw new ArgumentException($"File must be a JPEG or PNG image. Current content type: {request.File.ContentType}");
             }
         }
     }

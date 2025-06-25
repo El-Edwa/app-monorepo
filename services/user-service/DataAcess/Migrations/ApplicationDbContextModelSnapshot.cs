@@ -280,7 +280,7 @@ namespace DataAcess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Image");
+                    b.ToTable("Image", (string)null);
                 });
 
             modelBuilder.Entity("Models.Domain.RefreshToken", b =>
@@ -312,7 +312,7 @@ namespace DataAcess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("Models.Domain.ApplicationUser", b =>
