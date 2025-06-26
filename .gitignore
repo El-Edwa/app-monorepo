@@ -8,7 +8,9 @@ __pycache__/
      .env
      *.log
      .dockerignore
-
+     *.vs
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+/services/.vs/services/CopilotIndices/17.14.786.1071
+/services/.vs
