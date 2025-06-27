@@ -1,0 +1,62 @@
+http:
+  port: ${GATEWAY_PORT}
+admin:
+  port: ${ADMIN_PORT}
+  host: localhost
+
+apiEndpoints:
+  health:
+    host: localhost
+    paths: ["/", "/health"]
+  tweets:
+    host: localhost
+    paths: ["/api/v1/tweets", "/api/v1/tweets/*"]
+
+serviceEndpoints:
+  tweet-service:
+    url: "${TWEET_SERVICE_URL}"
+
+policies:
+  - cors
+  - log
+  - proxy
+  - rate-limit
+  - expression
+
+pipelines:
+  health:
+    apiEndpoints:
+      - health
+    policies:
+      - expression:
+          - action:
+              jscode: |
+                req.egContext.matchedPolicy = 'health-check';
+                res.status(200).json({
+                  status: 'ok',
+                  service: 'X-Clone API Gateway',
+                  timestamp: new Date().toISOString(),
+                  version: '1.0.0'
+                });
+  tweets:
+    apiEndpoints:
+      - tweets
+    policies:
+      - cors:
+          - action:
+              origin: ["${FRONTEND_URL}"]
+              credentials: true
+      - log:
+          - action:
+              message: "Tweet API request: ${req.method} ${req.url}"
+      - rate-limit:
+          - action:
+              max: ${TWEET_RATE_LIMIT}
+              windowMs: ${RATE_LIMIT_WINDOW}
+      - proxy:
+          - action:
+              serviceEndpoint: tweet-service
+              changeOrigin: true
+              prependPath: false
+              ignorePath: false
+              stripPath: true
