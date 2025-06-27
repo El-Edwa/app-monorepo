@@ -65,7 +65,7 @@ Keep in mind that each service must have a:\
 2- Dependency file (e.g. `requirements.txt` or `package.json`)\
 3- `src` directory containing the source code
 
-When working on your service, you must create a branch with the name of the service (e.g. `feature/<service-name>`) where you will commit your work to.
+When working on your service, you must create a branch with the name of the service (e.g. `service/<service-name>`) where you will commit your work to.
 
 A branch protection rule requiring pull requests before merging into main has been set up, although it can be overriden for now if necessary.
 
