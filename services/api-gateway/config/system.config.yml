@@ -1,0 +1,28 @@
+db:
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    namespace: ${REDIS_NAMESPACE}
+
+# Logging configuration
+logging:
+  level: ${LOG_LEVEL}
+  file:
+    enabled: true
+    path: ${LOG_FILE}
+  console:
+    enabled: true
+
+
+cors:
+  origin: ["{ALL}"]
+  credentials: true
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
+
+rateLimits:
+  default:
+    max: ${TWEET_RATE_LIMIT}
+    windowMs: ${RATE_LIMIT_WINDOW}
+  strict:
+    max: 10
+    windowMs: ${RATE_LIMIT_WINDOW}
