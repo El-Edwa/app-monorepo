@@ -1,60 +1,72 @@
 ﻿using DataAcess.Repos.IRepos;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Models.Domain;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAcess.Repos
 {
+    /// <summary>
+    /// Repository implementation for Image entity
+    /// This handles database operations only
+    /// </summary>
     public class ImageRepository : IImageRepository
     {
-        private readonly ApplicationDbContext db;
-        private readonly IWebHostEnvironment webHostEnvironment;
-        private readonly IHttpContextAccessor contextAccessor;
+        private readonly ApplicationDbContext _db;
 
-        public ImageRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment ,IHttpContextAccessor contextAccessor)
+        public ImageRepository(ApplicationDbContext db)
         {
-            this.db = db;
-            this.webHostEnvironment = webHostEnvironment;
-            this.contextAccessor = contextAccessor;
+            _db = db;
         }
 
-        public async Task<Image> Upload(Image image)
+        public async Task<Image> CreateAsync(Image image)
         {
-            if (image.File == null || image.File.Length == 0)
+            try
             {
-                throw new ArgumentException("Uploaded file is empty or null.");
-            }
+                // Ensure Id is 0 for new entity
+                image.Id = 0;
+                
+                await _db.Image.AddAsync(image);
+                await _db.SaveChangesAsync();
 
-            var folderPath = Path.Combine(webHostEnvironment.ContentRootPath, "Images");
-            if (!Directory.Exists(folderPath))
+                // Verify the image was saved and has a valid Id
+                if (image.Id <= 0)
+                {
+                    throw new Exception("Failed to save image to database");
+                }
+
+                return image;
+            }
+            catch (Exception ex)
             {
-                Directory.CreateDirectory(folderPath);
+                throw new Exception($"Failed to create image in database: {ex.Message}", ex);
             }
-
-            var localFilepath = Path.Combine(folderPath, $"{image.FileName}{image.FileExtension}");
-
-            Console.WriteLine($"Saving to: {localFilepath}");
-            Console.WriteLine($"File Size: {image.File.Length} bytes");
-
-            using (var fileStream = new FileStream(localFilepath, FileMode.CreateNew))
-            {
-                await image.File.CopyToAsync(fileStream);
-            }
-
-            var urlFilepath = $"{contextAccessor.HttpContext.Request.Scheme}://{contextAccessor.HttpContext.Request.Host}" +
-                              $"{contextAccessor.HttpContext.Request.PathBase}/Images/{image.FileName}{image.FileExtension}";
-
-            image.FilePath = urlFilepath;
-            await db.Image.AddAsync(image);
-            await db.SaveChangesAsync();
-
-            return image;
         }
 
+        public async Task<Image> GetByIdAsync(int id)
+        {
+            return await _db.Image.FindAsync(id);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                var image = await _db.Image.FindAsync(id);
+                
+                if (image == null)
+                {
+                    return false;
+                }
+
+                _db.Image.Remove(image);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

@@ -13,5 +13,9 @@ namespace Models.DTOs.Auth
         public string Token { get; set; }
         public string RefreshToken { get; set; }
         public DateTime RefreshTokenExpiration { get; set; }
+        
+        // Authentication metadata
+        public DateTime TokenExpiration { get; set; }
+        public bool IsAuthenticated => !string.IsNullOrEmpty(Token);
     }
 }
