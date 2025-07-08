@@ -11,8 +11,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { IoMdClose } from "react-icons/io";
+import EditProfileForm from "./EditProfileForm";
 
-const MainButtons = () => {
+const MainButtons = ({ user }: any) => {
   return (
     <div className="flex justify-end w-full  h-[70px]">
       <Dialog>
@@ -21,15 +23,19 @@ const MainButtons = () => {
             Edit Profile
           </Button>
         </DialogTrigger>
-        <DialogOverlay className="bg-[#596e8140]" />
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </DialogDescription>
-          </DialogHeader>
+        <DialogContent className="[&>button]:hidden rounded-2xl sm:max-w-[600px] h-[90%]  ">
+          <div className="flex justify-between px-4 py-2">
+            <div className="flex gap-4 items-center">
+              <DialogClose className="cursor-pointer hover:bg-white/10 rounded-full p-2 text-2xl ">
+                <IoMdClose />
+              </DialogClose>
+              <p className="font-bold text-2xl">Edit Profile</p>
+            </div>
+            <Button className=" rounded-3xl text-lg cursor-pointer hover:bg-white/85">
+              Save
+            </Button>
+          </div>
+          <EditProfileForm user={user} />
         </DialogContent>
       </Dialog>
     </div>

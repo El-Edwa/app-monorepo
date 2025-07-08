@@ -1,5 +1,5 @@
 import ProfileCardHover from "./ProfileCardHover";
-import SuggestedPeopleListItem from "./suggestedPeopleListItem";
+import SuggestedPeopleListItem from "./SuggestedPeopleListItem";
 import {
   HoverCard,
   HoverCardTrigger,

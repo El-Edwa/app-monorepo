@@ -2,7 +2,7 @@ import PicsSection from "@/components/profile/PicsSection";
 import MainButtons from "@/components/profile/MainButtons";
 import InfoSection from "@/components/profile/InfoSection";
 import Sections from "@/components/profile/Sections";
-import SuggestedPeopleList from "@/components/root/whoToFollow/suggestedPeopleList";
+import SuggestedPeopleList from "@/components/root/whoToFollow/SuggestedPeopleList";
 const profilePage = () => {
   const user = {
     name: "Ahmed Mohsen",
@@ -23,7 +23,7 @@ const profilePage = () => {
     <div className="w-[600px] flex flex-col items-center">
       <PicsSection user={user} />
       <div className="px-[16px] pt-[12px] w-full">
-        <MainButtons />
+        <MainButtons user={user} />
         <InfoSection user={user} />
       </div>
       <Sections />
