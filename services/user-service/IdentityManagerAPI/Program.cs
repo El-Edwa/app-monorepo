@@ -3,6 +3,8 @@ using DataAcess.Repos;
 using DataAcess.Repos.IRepos;
 using IdentityManager.Services.ControllerService;
 using IdentityManager.Services.ControllerService.IControllerService;
+using IdentityManager.Services.Infrastructure;
+using IdentityManager.Services.Infrastructure.Interfaces;
 using IdentityManagerAPI.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -15,8 +17,6 @@ using Scalar.AspNetCore;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -31,21 +31,22 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingConfig));
-
 
 builder.Services.AddScoped<UserManager<ApplicationUser>>();
 builder.Services.AddScoped<SignInManager<ApplicationUser>>();
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
 
-// Add Services
+// Infrastructure Services
+builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+
+// Application Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
-
-// Add Repositories
+// Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
@@ -55,9 +56,7 @@ builder.Services.AddOpenApi("v1", options =>
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
 });
 
-
-
-// Configure JWT Authentication insted of cookies
+// Configure JWT Authentication instead of cookies
 var key = Encoding.ASCII.GetBytes(builder.Configuration["ApiSettings:Secret"]);
 builder.Services.AddAuthentication(options =>
 {
@@ -76,7 +75,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
 // Register the global exception handler
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -84,15 +82,11 @@ builder.Services.AddProblemDetails();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 // Use the global exception handler
 app.UseExceptionHandler();
-
 
 app.UseHttpsRedirection();
 app.UseAuthentication(); 

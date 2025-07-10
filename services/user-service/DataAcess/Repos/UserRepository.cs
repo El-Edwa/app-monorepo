@@ -41,7 +41,11 @@ namespace DataAcess.Repos
 
         public async Task<ApplicationUser> GetUserByID(string userID)
         {
-            var user = await db.ApplicationUser.FindAsync(userID);
+            var user = await db.ApplicationUser
+                .Include(u => u.Image)
+                .Include(u => u.BackgroundImage)
+                .FirstOrDefaultAsync(u => u.Id == userID);
+            
             return user ?? throw new InvalidOperationException("User not found.");
         }
 
@@ -63,18 +67,27 @@ namespace DataAcess.Repos
                 };
             }
             
+            // Load the user with related image data
+            user = await db.ApplicationUser
+                .Include(u => u.Image)
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+            
             // Generate JWT token
             var accessToken = await GenerateJwtToken(user);
             
             // Create refresh token
             var refreshToken = await CreateRefreshToken(user.Id);
+            
+            // Get token expiration
+            var tokenExpiration = DateTime.UtcNow.AddMinutes(15); // Same as in GenerateJwtToken
 
             return new LoginResponseDTO()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(accessToken),
                 User = mapper.Map<UserDTO>(user),
                 RefreshToken = refreshToken.Token,
-                RefreshTokenExpiration = refreshToken.Expires
+                RefreshTokenExpiration = refreshToken.Expires,
+                TokenExpiration = tokenExpiration
             };
         }
 
@@ -137,6 +150,7 @@ namespace DataAcess.Repos
         {
             var storedToken = await db.RefreshTokens
                 .Include(rt => rt.User)
+                .ThenInclude(u => u.Image)
                 .FirstOrDefaultAsync(rt => rt.Token == refreshToken);
 
             if (storedToken == null)
@@ -158,13 +172,17 @@ namespace DataAcess.Repos
             var newRefreshToken = await CreateRefreshToken(user.Id);
 
             await db.SaveChangesAsync();
+            
+            // Get token expiration
+            var tokenExpiration = DateTime.UtcNow.AddMinutes(15); // Same as in GenerateJwtToken
 
             return new LoginResponseDTO
             {
                 Token = newAccessTokenString,
                 User = mapper.Map<UserDTO>(user),
                 RefreshToken = newRefreshToken.Token,
-                RefreshTokenExpiration = newRefreshToken.Expires
+                RefreshTokenExpiration = newRefreshToken.Expires,
+                TokenExpiration = tokenExpiration
             };
         }
 
@@ -189,7 +207,8 @@ namespace DataAcess.Repos
                 UserName = registerRequestDTO.UserName,
                 Name = registerRequestDTO.Name,
                 Email = registerRequestDTO.Email,
-                NormalizedEmail = registerRequestDTO.Email.ToUpper()
+                NormalizedEmail = registerRequestDTO.Email.ToUpper(),
+                CreatedDate = DateTime.UtcNow // Explicitly set CreatedDate during registration
             };
 
             var userDTO = new UserDTO();
@@ -234,10 +253,44 @@ namespace DataAcess.Repos
                 return false;
             }
 
-            if (user.ImageId != 0 || user.ImageId != null)
+            // Update profile image
+            if (user.ImageId.HasValue)
             {
                 existingUser.ImageId = user.ImageId;
             }
+            
+            // Update background image if it's present in the model
+            if (user.BackgroundImageId.HasValue)
+            {
+                existingUser.BackgroundImageId = user.BackgroundImageId;
+            }
+            
+            // Update other profile fields
+            if (user.Name != null)
+            {
+                existingUser.Name = user.Name;
+            }
+            
+            if (user.Bio != null)
+            {
+                existingUser.Bio = user.Bio;
+            }
+            
+            if (user.Location != null)
+            {
+                existingUser.Location = user.Location;
+            }
+            
+            if (user.WebsiteUrl != null)
+            {
+                existingUser.WebsiteUrl = user.WebsiteUrl;
+            }
+            
+            // Update active status
+            existingUser.IsActive = user.IsActive;
+            
+            // IMPORTANT: Do NOT update CreatedDate - we preserve this value
+            // from registration only
 
             var result = await db.SaveChangesAsync();
             return result > 0;
