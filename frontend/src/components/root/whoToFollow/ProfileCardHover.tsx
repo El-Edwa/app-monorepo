@@ -1,6 +1,23 @@
 import { Button } from "@/components/ui/button";
-const ProfileCardHover = ({ user }: any) => {
-  const formatCount = (count: number) => {
+type User={
+  id?: number;
+  name?: string;
+  username?: string;
+  createdAt?: string;
+  profilePicture?: string | null;
+  coverPicture?: string | null;
+  bio?: string | null;
+  location?: string | null;
+  website?: string | null;
+  followers?: number | null | undefined;
+  following?: number | null | undefined;
+  posts?: number | null | undefined;
+  birthday?: string | null | undefined;
+  profession?: string | null | undefined;
+}
+const ProfileCardHover = ({ user }: { user: User }) => {
+  const formatCount = (count: number | null) => {
+    if (count === null) return "0";
     if (count >= 1000000) {
       return `${(count / 1000000).toFixed(1)}M`;
     } else if (count >= 1000) {

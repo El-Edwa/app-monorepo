@@ -1,6 +1,10 @@
-import { useState, useEffect } from "react";
-
-const Textarea = ({ label, max, min }: any) => {
+import { useState } from "react";
+interface TextareaProps {
+  label?: string;
+  max?: number;
+  min?: number;
+}
+const Textarea = ({ label, max }: TextareaProps) => {
   const [value, setValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -24,11 +28,15 @@ const Textarea = ({ label, max, min }: any) => {
         >
           {label && (
             <label
-              className={`transition-all duration-300 ease-in-out origin-left ${
-                isFocused || value
-                  ? "text-[#1D9BF0] scale-75 text-md"
-                  : "text-[#4d5155] scale-100 text-xl"
-              }`}
+                  className={`transition-all duration-300 ease-in-out origin-left ${
+                isFocused 
+                  ? "text-[#1D9BF0]"
+                  : "text-[#4d5155]"
+              }
+              ${
+                value? "text-xs":""
+              }
+              `}
             >
               {label}
             </label>

@@ -9,7 +9,14 @@ import { format } from "date-fns";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import Dropdown from "../ui/dropdown";
-const BirthDatySection = ({ user, setEditingBirthday }: any) => {
+interface BirthDaySectionProps {
+  user: {
+    birthday?: string | Date | null;
+  };
+ 
+}
+
+const BirthDatySection = ({ user }: BirthDaySectionProps) => {
   const [editable, setEditable] = useState(false);
   const months = [
     "January",
@@ -96,7 +103,7 @@ const BirthDatySection = ({ user, setEditingBirthday }: any) => {
             </Button>
             <Button
               className="rounded-full bg-black text-white hover:bg-white/10 border border-gray-300 cursor-pointer"
-              onClick={() => setEditingBirthday(false)}
+              
             >
               <DialogClose>Cancel</DialogClose>
             </Button>

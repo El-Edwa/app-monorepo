@@ -1,6 +1,11 @@
-import { useState, useEffect, Fragment } from "react";
-
-const Input = ({ label, max, min, required = false }: any) => {
+import { useState, useEffect } from "react";
+interface inputFieldProps {
+  label?:string,
+  max?:number,
+  min?:number,
+  required?:boolean
+}
+const Input = ({ label, max, required = false }:inputFieldProps) => {
   const [value, setValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [touched, setTouched] = useState(false);
@@ -22,7 +27,7 @@ const Input = ({ label, max, min, required = false }: any) => {
     <div className="flex flex-col gap-2 p-4">
       <div
         className={`relative w-full h-[60px] border ${
-          isFocused || value ? "border-[#1D9BF0]" : "border-[#4d5155]"
+          isFocused  ? "border-[#1D9BF0]" : "border-[#4d5155]"
         }
           ${hasError ? "border-red-400" : ""} 
         rounded-md`}
@@ -35,9 +40,12 @@ const Input = ({ label, max, min, required = false }: any) => {
           {label && (
             <label
               className={`transition-all duration-300 ease-in-out origin-left ${
-                isFocused || value
-                  ? "text-[#1D9BF0] scale-75 text-xs"
-                  : "text-[#4d5155] scale-100 text-md"
+                isFocused 
+                  ? "text-[#1D9BF0]"
+                  : "text-[#4d5155]"
+              }
+              ${
+                value? "text-xs":""
               }
               ${hasError ? "text-red-400" : ""}
               `}

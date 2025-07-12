@@ -1,6 +1,21 @@
 import { Button } from "@/components/ui/button";
-
-const SuggestedPeopleListItem = ({ user }: any) => {
+interface User {
+ id?: number,
+    name?: string,
+    username?: string,
+    createdAt?: string,
+    profilePicture?: string | null,
+    coverPicture?: string | null,
+    bio?: string | null,
+    location?: string | null,
+    website?: string | null,
+    followers?: number | null,
+    following?: number | null,
+    posts?: number | null,
+    birthday?: string | null,
+    proffession?: string | null,
+}
+const SuggestedPeopleListItem = ({ user }: { user: User }) => {
   return (
     <div className="w-full flex items-start justify-between p-3 cursor-pointer">
       <div className="flex items-start gap-3 flex-1 min-w-0">
