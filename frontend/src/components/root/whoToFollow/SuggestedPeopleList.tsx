@@ -1,5 +1,5 @@
-import ProfileCardHover from "./ProfileCardHover";
-import SuggestedPeopleListItem from "./SuggestedPeopleListItem";
+import ProfileCardHover from "@/components/root/whoToFollow/ProfileCardHover";
+import SuggestedPeopleListItem from "@/components/root/whoToFollow/SuggestedPeopleListItem";
 import {
   HoverCard,
   HoverCardTrigger,

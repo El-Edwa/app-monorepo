@@ -1,15 +1,10 @@
-import Input from "../ui/input";
-import Textarea from "../ui/textarea";
-import BirthDatySection from "./BirthDaySection";
-import { useState } from "react";
-import PicsSection from "./PicsSection";
+import Input from "@/components/ui/input";
+import Textarea from "@/components/ui/textarea";
+import BirthDatySection from "@/components/profile/BirthDaySection";
+import PicsSection from "@/components/profile/PicsSection";
 const EditProfileForm = ({ user }: any) => {
-  const [EditingBirthday, setEditingBirthday] = useState(false);
-  const setEditingBirthdayFunc = (vlu: boolean) => {
-    setEditingBirthday(vlu);
-  };
   return (
-    <form className="flex flex-col  w-full  overflow-y-auto">
+    <form className="flex flex-col w-[600px] overflow-y-auto">
       <div className="mb-18">
         <PicsSection user={user} where={"editProfile"} />
       </div>
@@ -20,7 +15,7 @@ const EditProfileForm = ({ user }: any) => {
 
       <BirthDatySection
         user={user}
-        setEditingBirthday={setEditingBirthdayFunc}
+
       />
     </form>
   );

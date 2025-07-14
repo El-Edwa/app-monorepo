@@ -16,8 +16,8 @@ type User={
   profession?: string | null | undefined;
 }
 const ProfileCardHover = ({ user }: { user: User }) => {
-  const formatCount = (count: number | null) => {
-    if (count === null) return "0";
+  const formatCount = (count: number | null | undefined) => {
+    if (count === null || count === undefined) return "0";
     if (count >= 1000000) {
       return `${(count / 1000000).toFixed(1)}M`;
     } else if (count >= 1000) {

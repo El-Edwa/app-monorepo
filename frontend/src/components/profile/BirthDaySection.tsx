@@ -3,12 +3,12 @@ import {
   DialogClose,
   DialogContent,
   DialogTrigger,
-} from "../ui/dialog";
+} from "@/components/ui/dialog";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { format } from "date-fns";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import Dropdown from "../ui/dropdown";
+import Dropdown from "@/components/ui/dropdown";
 interface BirthDaySectionProps {
   user: {
     birthday?: string | Date | null;
