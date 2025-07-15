@@ -225,10 +225,11 @@ const PicsSection = ({ user, where }: any) => {
                         image={coverImageForCropping}
                         crop={coverCrop}
                         zoom={coverZoom}
-                        aspect={16 / 9}
+                        aspect={2.35 / 1}
                         onCropChange={setCoverCrop}
                         onCropComplete={onCoverCropComplete}
                         onZoomChange={setCoverZoom}
+                       
                         showGrid={false}
                       />
                     </div>
