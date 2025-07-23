@@ -109,6 +109,23 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+/* src/index.css */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #17181d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3e4144;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3e4144;
+}
 
 @layer base {
   * {
@@ -116,5 +133,6 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
 }
