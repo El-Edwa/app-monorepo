@@ -37,8 +37,45 @@ services:
     networks:
       - backend-network
 
+  example-service:
+    build:
+      context: ./services/example-service
+    image: example-service:latest
+    ports:
+      - "5000:5000"
+    networks:
+      - backend-network
+
+  kong-cp:
+    image: '${GW_IMAGE:-kong/kong-gateway:3.11.0.1}'  # Main Kong Gateway Control Plane (default to latest version)
+    container_name: kong-cp
+    restart: on-failure
+    networks:
+      - backend-network
+    environment:
+#     <<: *kong-env
+      KONG_DATABASE: off
+      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl  # Admin API on HTTP + HTTPS
+      KONG_ADMIN_GUI_LISTEN: 0.0.0.0:8002, 0.0.0.0:8445 ssl  # Kong Manager on HTTP + HTTPS
+      KONG_ADMIN_GUI_URL: http://${GW_HOST:-localhost}:8002  # URL for GUI links
+      KONG_PASSWORD: handyshake  # Required for logging in to Kong Manager (RBAC)
+#    depends_on:
+#      kong-bootstrap:
+#        condition: service_completed_successfully  # Start only after bootstrap has succeeded
+    volumes:
+      - ./services/api-gateway/kong-config:/kong/declarative
+    ports:
+      - "8000:8000"  # Proxy HTTP
+      - "8443:8443"  # Proxy HTTPS
+      - "8001:8001"  # Admin API HTTP
+      - "8444:8444"  # Admin API HTTPS
+      - "8002:8002"  # Kong Manager HTTP
+      - "8445:8445"  # Kong Manager HTTPS
+
 networks:
   frontend-network:
     driver: bridge
   backend-network:
     driver: bridge
+
