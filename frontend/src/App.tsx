@@ -3,7 +3,7 @@ import { HelmetProvider } from "react-helmet-async";
 import RootLayout from "@/layouts/RootLayout";
 import HomePage from "@/pages/HomePage";
 import ErrorPage from "@/pages/ErrorPage";
-
+import ProfilePage from "@/pages/ProfilePage";
 function App() {
   return (
     <HelmetProvider>
@@ -47,15 +47,7 @@ function App() {
                 </div>
               }
             />
-            <Route
-              path="profile"
-              element={
-                <div>
-                  <h1>Profile</h1>
-                  <p>Your profile and posts.</p>
-                </div>
-              }
-            />
+            <Route path="profile" element={<ProfilePage />} />
           </Route>
           <Route path="*" element={<ErrorPage />} />
         </Routes>
